@@ -1,0 +1,170 @@
+.hero {
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding-block: clamp(88px, 12vh, 140px) clamp(110px, 15vh, 160px);
+  overflow: hidden;
+  outline: none;
+}
+
+.hero__grid {
+  display: grid;
+  gap: clamp(56px, 8vw, 72px);
+  align-items: center;
+}
+@media (min-width: 860px) {
+  .hero__grid {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+.hero__copy {
+  display: grid;
+  gap: 18px;
+  max-width: 40rem;
+}
+
+.hero__title {
+  font-size: var(--step-5);
+}
+.hero__name {
+  position: relative;
+  display: inline-block;
+  color: var(--coral-ink);
+  white-space: nowrap;
+}
+.hero__underline {
+  position: absolute;
+  left: -2%;
+  bottom: -0.1em;
+  width: 104%;
+  height: 0.2em;
+  color: var(--coral);
+  z-index: -1;
+}
+
+.hero__subtitle {
+  max-width: 30ch;
+}
+.hero__note {
+  color: var(--ink-soft);
+}
+
+/* ---- Photo cluster: one dominant photo, the mascot as a small guide, a few accents ---- */
+
+.hero__photo {
+  position: relative;
+  justify-self: center;
+  width: min(74vw, 380px);
+}
+
+/* A scrap of grid paper behind the polaroid (instead of a gradient blob) */
+.hero__grid-paper {
+  position: absolute;
+  inset: -8% -12% 6% 10%;
+  z-index: -1;
+  background: var(--grid), var(--paper-card);
+  box-shadow: var(--shadow-paper);
+  transform: rotate(-5deg);
+}
+
+.hero__age {
+  position: absolute;
+  z-index: 4;
+  top: -26px;
+  left: -28px;
+  width: 88px;
+  height: 88px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  --badge-bg: var(--powder-blue);
+}
+.hero__age-num {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.hero__day {
+  position: absolute;
+  left: -6%;
+  bottom: -52px;
+  font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.7rem);
+  color: var(--coral-ink);
+  transform: rotate(-4deg);
+  white-space: nowrap;
+}
+
+.hero__kt {
+  position: absolute;
+  z-index: 4;
+  right: -14%;
+  bottom: -20%;
+  width: clamp(110px, 32vw, 160px);
+}
+
+.hero__heart {
+  position: absolute;
+  z-index: 4;
+  top: 8%;
+  right: -16%;
+  width: clamp(58px, 16vw, 78px);
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  transition: scale 0.2s var(--ease-spring);
+}
+.hero__heart:hover {
+  scale: 1.08;
+}
+.hero__heart.is-tapped .sticker {
+  animation: wiggle 0.5s var(--ease-out);
+}
+
+@media (max-width: 520px) {
+  .hero__age {
+    left: -12px;
+    width: 76px;
+    height: 76px;
+  }
+  .hero__heart {
+    right: -8%;
+  }
+  .hero__kt {
+    right: -8%;
+  }
+}
+
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 6px 10px;
+}
+.hero .hero__heart {
+  pointer-events: auto;
+}
+.hero__sparkles {
+  top: 12%;
+  left: 3%;
+}
+@media (max-width: 859px) {
+  .hero__sparkles {
+    top: 64px;
+    left: auto;
+    right: 6%;
+    width: 52px !important;
+  }
+}

@@ -1,0 +1,93 @@
+/* Shared pieces: stickers, simple SVG doodles, torn edges, badges, labels, notes */
+
+/* Die-cut sticker images (DESIGN_LANGUAGE §11) */
+.sticker {
+  display: block;
+  height: auto;
+  max-width: none;
+  transform: rotate(var(--r, 0deg)) scaleX(var(--flip, 1));
+  filter: var(--sticker-shadow);
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Simple line doodles (underlines, circles, small icons) */
+.doodle .df {
+  fill: var(--doodle-fill, none);
+}
+.doodle .dk {
+  fill: currentColor;
+}
+
+/* Torn-paper top edge in the section's own paper color */
+.torn-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% - 1px);
+  width: 100%;
+  height: clamp(14px, 2.4vw, 26px);
+  fill: var(--bg);
+  pointer-events: none;
+  filter: drop-shadow(0 -2px 1px rgb(72 48 34 / 0.05));
+}
+
+/* Round stamp-style badge (e.g. "25th birthday") */
+.badge {
+  display: inline-grid;
+  place-items: center;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--badge-bg, var(--butter));
+  color: var(--ink);
+  box-shadow:
+    0 0 0 4px var(--paper-card),
+    var(--shadow-paper);
+  transform: rotate(var(--r, 8deg));
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+/* A torn-paper label (the chapter eyebrow sits on one of these) */
+.paper-label {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  justify-self: start;
+  min-height: 2.4em;
+  padding: 0.5em 1.3em 0.55em;
+  transform: rotate(var(--r, -2deg));
+  isolation: isolate;
+}
+.paper-label__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  filter: var(--sticker-shadow);
+  pointer-events: none;
+}
+
+/* Handwritten note */
+.scribble-note {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: var(--step-1);
+  line-height: 1.15;
+  color: var(--accent-ink, var(--ink));
+  transform: rotate(var(--r, -3deg));
+  max-width: 22ch;
+}
+
+/* Small decorative stickers placed in a section's margins. They pop in once — never float forever. */
+.deco {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+.paper-label > span {
+  display: grid;
+  justify-items: center;
+}

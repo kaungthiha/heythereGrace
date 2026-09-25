@@ -1,0 +1,284 @@
+/* ===================== Things I love about you ===================== */
+
+.love__header {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+.love__title {
+  font-size: var(--step-4);
+  max-width: 14ch;
+}
+.love__subtitle {
+  font-size: var(--step-2);
+  color: var(--accent-ink);
+}
+
+.love__board {
+  display: grid;
+  gap: 28px;
+  align-items: center;
+}
+.love__portrait {
+  position: relative;
+  justify-self: center;
+  width: min(70vw, 320px);
+}
+.love__kt {
+  right: -18%;
+  bottom: -14%;
+  width: clamp(96px, 26vw, 132px);
+  z-index: 2;
+}
+
+.love__notes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 14px;
+}
+.love__note {
+  position: relative;
+  min-height: 7.5rem;
+  padding: 24px 16px 18px;
+  background: var(--note);
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.35;
+  box-shadow: var(--shadow-paper);
+  transform: rotate(var(--r));
+  text-wrap: pretty;
+  touch-action: manipulation;
+  user-select: none;
+}
+.love__note:nth-child(even) {
+  margin-top: 14px;
+}
+.love__note-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  translate: -50% 0;
+  filter: none;
+}
+.love__note.is-wiggling {
+  animation: wiggle 0.55s var(--ease-out);
+}
+.love__note-icon {
+  float: right;
+  margin: -6px -4px 4px 6px;
+  color: var(--ink-faint);
+}
+
+@media (min-width: 900px) {
+  .love__board {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 40px;
+  }
+  .love__portrait {
+    grid-column: 2;
+    grid-row: 1;
+    width: 320px;
+  }
+  .love__notes--left {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .love__notes--right {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .love__notes {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .love__notes--left .love__note:nth-child(odd) {
+    margin-right: 40px;
+  }
+  .love__notes--right .love__note:nth-child(even) {
+    margin-left: 40px;
+  }
+  .love__note:nth-child(even) {
+    margin-top: 0;
+  }
+}
+
+/* ===================== Us, by the numbers (receipt) ===================== */
+
+.stats {
+  background: var(--grid), var(--bg) var(--grain);
+}
+.stats__wrap {
+  display: grid;
+  justify-items: center;
+}
+.stats__receipt {
+  position: relative;
+  width: min(100%, 380px);
+  padding: 30px 26px 22px;
+  background: var(--paper-card);
+  color: var(--ink);
+  font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: 0.92rem;
+  box-shadow: var(--shadow-lift);
+  transform: rotate(-1.5deg);
+  --zig: 10px;
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--zig) * 2) 100%;
+}
+.stats__receipt hr {
+  border: 0;
+  border-top: 2px dashed #cfc5b8;
+  margin: 16px 0;
+}
+.stats__title {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: var(--step-2);
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+.stats__since {
+  margin-top: 6px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+}
+.stats__lines {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.stats__line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.stats__line dt {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.stats__line dt::after {
+  content: '';
+  flex: 1;
+  border-bottom: 2px dotted #cfc5b8;
+  translate: 0 -4px;
+}
+.stats__line dt small {
+  text-transform: none;
+  color: var(--ink-faint);
+}
+.stats__line dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.stats__line--big dd {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--blue-ink);
+}
+.stats__todo {
+  margin-top: 14px;
+  font-size: 0.8rem;
+}
+.stats__foot {
+  text-align: center;
+  color: var(--ink-faint);
+  font-size: 0.78rem;
+}
+.stats__barcode {
+  height: 38px;
+  margin: 14px 14px 16px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px,
+    transparent 2px 4px,
+    var(--ink) 4px 7px,
+    transparent 7px 9px,
+    var(--ink) 9px 10px,
+    transparent 10px 13px
+  );
+  opacity: 0.85;
+}
+
+/* ===================== Birthday letter ===================== */
+
+.letter {
+  padding-block: clamp(96px, 14vw, 180px);
+}
+.letter__top {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+.letter__paper {
+  position: relative;
+  max-width: 38rem;
+  margin-inline: auto;
+  padding: clamp(36px, 7vw, 72px) clamp(24px, 6vw, 64px) clamp(40px, 7vw, 64px);
+  background:
+    linear-gradient(90deg, transparent 0 clamp(14px, 4vw, 40px), rgb(242 124 107 / 0.3) 0 calc(clamp(14px, 4vw, 40px) + 2px), transparent 0),
+    var(--paper-card);
+  color: var(--ink);
+  box-shadow: var(--shadow-lift);
+  transform: rotate(-0.4deg);
+  font-size: var(--step-1);
+  line-height: 1.7;
+}
+.letter__photo {
+  float: right;
+  width: clamp(120px, 34%, 200px);
+  margin: -8px -6px 16px 20px;
+}
+@media (max-width: 560px) {
+  .letter__photo {
+    float: none;
+    margin: -8px auto 24px;
+    width: 60%;
+  }
+}
+.letter__date {
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 20px;
+}
+.letter__greeting {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-style: italic;
+  font-weight: 500;
+  font-size: var(--step-2);
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+.letter__body {
+  display: grid;
+  gap: 1em;
+  text-wrap: pretty;
+}
+.letter__signoff {
+  margin-top: 1.6em;
+  clear: both;
+}
+.letter__signature {
+  font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem);
+  color: var(--coral-ink);
+  transform: rotate(-3deg);
+  transform-origin: left;
+  margin-top: 4px;
+}

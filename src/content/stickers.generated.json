@@ -1,0 +1,210 @@
+{
+ "birthday/bow": [
+  368,
+  266
+ ],
+ "birthday/cake": [
+  402,
+  418
+ ],
+ "birthday/candles": [
+  337,
+  328
+ ],
+ "birthday/card": [
+  301,
+  320
+ ],
+ "birthday/confetti": [
+  320,
+  310
+ ],
+ "birthday/envelope": [
+  323,
+  320
+ ],
+ "birthday/flowers": [
+  258,
+  288
+ ],
+ "birthday/gift": [
+  347,
+  369
+ ],
+ "birthday/hearts": [
+  305,
+  252
+ ],
+ "birthday/kt-cake": [
+  372,
+  395
+ ],
+ "birthday/popper": [
+  302,
+  322
+ ],
+ "birthday/sparkles": [
+  275,
+  273
+ ],
+ "mascot/kt-backpack": [
+  361,
+  494
+ ],
+ "mascot/kt-booty-walk": [
+  251,
+  437
+ ],
+ "mascot/kt-heart": [
+  304,
+  402
+ ],
+ "mascot/kt-note": [
+  302,
+  404
+ ],
+ "mascot/kt-peace": [
+  372,
+  492
+ ],
+ "mascot/kt-point-left": [
+  333,
+  465
+ ],
+ "mascot/kt-point-right": [
+  352,
+  491
+ ],
+ "mascot/kt-secret": [
+  293,
+  400
+ ],
+ "mascot/kt-tongue": [
+  365,
+  511
+ ],
+ "mascot/kt-wave": [
+  336,
+  514
+ ],
+ "scrapbook/arrow-loop": [
+  256,
+  198
+ ],
+ "scrapbook/arrow-red": [
+  228,
+  147
+ ],
+ "scrapbook/arrow-squiggle": [
+  233,
+  108
+ ],
+ "scrapbook/arrow-up": [
+  101,
+  148
+ ],
+ "scrapbook/corner-blue": [
+  165,
+  165
+ ],
+ "scrapbook/corner-brown": [
+  188,
+  171
+ ],
+ "scrapbook/corner-pink": [
+  175,
+  155
+ ],
+ "scrapbook/corner-sage": [
+  170,
+  169
+ ],
+ "scrapbook/doodle-cluster": [
+  419,
+  210
+ ],
+ "scrapbook/paper-blue": [
+  469,
+  239
+ ],
+ "scrapbook/paper-kraft": [
+  449,
+  230
+ ],
+ "scrapbook/polaroid-pink": [
+  467,
+  436
+ ],
+ "scrapbook/polaroid-sage": [
+  484,
+  453
+ ],
+ "scrapbook/sparkle-cluster": [
+  150,
+  187
+ ],
+ "scrapbook/tape-blue": [
+  265,
+  162
+ ],
+ "scrapbook/tape-hearts": [
+  257,
+  165
+ ],
+ "scrapbook/tape-pink": [
+  268,
+  165
+ ],
+ "scrapbook/tape-sage": [
+  270,
+  175
+ ],
+ "trip/backpack": [
+  398,
+  380
+ ],
+ "trip/cloud": [
+  341,
+  175
+ ],
+ "trip/compass": [
+  297,
+  348
+ ],
+ "trip/envelope-sealed": [
+  393,
+  318
+ ],
+ "trip/footsteps": [
+  304,
+  190
+ ],
+ "trip/kt-secret-closeup": [
+  380,
+  418
+ ],
+ "trip/kt-suitcase": [
+  417,
+  407
+ ],
+ "trip/luggage-tag": [
+  302,
+  383
+ ],
+ "trip/map": [
+  418,
+  324
+ ],
+ "trip/path": [
+  430,
+  174
+ ],
+ "trip/question": [
+  313,
+  308
+ ],
+ "trip/suitcase": [
+  353,
+  445
+ ]
+}

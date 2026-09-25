@@ -1,0 +1,532 @@
+/* ===================== "That's everything." (the fake ending) ===================== */
+
+.ending {
+  min-height: 92svh;
+  display: grid;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+.ending__wrap {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+.ending__everything {
+  font-size: var(--step-3);
+  font-weight: 600;
+}
+
+/* KT waddles off stage, then "…almost." */
+.ending__walk {
+  width: clamp(84px, 20vw, 120px);
+  height: clamp(140px, 32vw, 200px);
+  display: grid;
+  align-items: end;
+}
+.ending__kt {
+  opacity: 0;
+}
+.is-in .ending__kt {
+  animation:
+    kt-appear 0.35s 0.7s var(--ease-out) forwards,
+    kt-waddle 0.34s 1.1s ease-in-out 6 alternate,
+    kt-exit 2.1s 1.1s cubic-bezier(0.5, 0, 0.75, 0.4) forwards;
+}
+@keyframes kt-appear {
+  to { opacity: 1; }
+}
+@keyframes kt-waddle {
+  from { rotate: -5deg; }
+  to { rotate: 5deg; }
+}
+@keyframes kt-exit {
+  to { translate: 70vw 0; opacity: 0; }
+}
+
+.ending__almost {
+  font-size: var(--step-3);
+  color: var(--coral-ink);
+}
+html.js .ending__almost.rv {
+  --rv-y: 0;
+  --rv-x: -12px;
+  transition-delay: 2.9s;
+  transition-duration: 1s, 0.9s;
+}
+
+/* ===================== The turn: page flips to a luggage tag ===================== */
+
+.turn {
+  overflow: hidden;
+  padding-bottom: clamp(170px, 20vw, 220px);
+}
+.turn__wrap {
+  display: grid;
+  justify-items: center;
+  gap: clamp(36px, 6vw, 56px);
+  text-align: center;
+}
+.turn__stage {
+  position: relative;
+  width: min(80vw, 340px);
+  aspect-ratio: 1.6;
+  perspective: 1400px;
+}
+
+.turn__tag {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 2px;
+  padding: 18px 26px 18px 64px;
+  background: #ead7b4 var(--grain);
+  color: var(--brown-deep);
+  border: 2.5px dashed rgb(90 57 41 / 0.45);
+  outline: 6px solid #ead7b4;
+  border-radius: 12px;
+  clip-path: polygon(34px 0, 100% 0, 100% 100%, 34px 100%, 0 calc(100% - 34px), 0 34px);
+  text-align: left;
+  transform: rotate(-4deg);
+  transform-origin: 10% 50%;
+}
+.is-in .turn__tag {
+  animation: tag-swing 1.2s 1.1s var(--ease-out) both;
+}
+.turn__tag-hole {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 0 0 0 5px #c9ab78;
+}
+.turn__tag-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.turn__tag-date {
+  font-size: clamp(2.4rem, 1.8rem + 3vw, 3.4rem);
+  line-height: 1;
+  color: var(--ink);
+}
+.turn__tag-row {
+  display: flex;
+  gap: 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.turn__page {
+  position: absolute;
+  inset: -12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+  background: var(--grid), var(--paper-card);
+  box-shadow: var(--shadow-lift);
+  border-radius: 4px;
+  transform-origin: 0 50%;
+  backface-visibility: hidden;
+}
+.is-in .turn__page {
+  animation: page-turn 1s 0.5s var(--ease-out) forwards;
+}
+@keyframes page-turn {
+  0% { transform: rotateY(0); }
+  100% { transform: rotateY(-165deg); opacity: 0; visibility: hidden; }
+}
+@keyframes tag-swing {
+  0% { transform: rotate(-4deg); }
+  30% { transform: rotate(4deg); }
+  60% { transform: rotate(-2.5deg); }
+  100% { transform: rotate(-2deg); }
+}
+
+.turn__lines {
+  display: grid;
+  gap: 8px;
+  font-weight: inherit;
+}
+.turn__line {
+  display: block;
+  font-size: var(--step-4);
+}
+.turn__line:last-child {
+  color: var(--blue-ink);
+}
+
+/* KT heads off down a dashed road */
+.turn__road {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 44px;
+  height: 120px;
+  border-bottom: 3px dashed rgb(63 108 147 / 0.35);
+  pointer-events: none;
+}
+.turn__kt {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  translate: -140px 0;
+}
+.turn__steps {
+  position: absolute;
+  bottom: 4px;
+  left: 18%;
+  opacity: 0;
+  filter: none;
+}
+.is-in .turn__kt {
+  animation: walk-across 4.2s 2.4s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+.is-in .turn__steps {
+  animation: kt-appear 0.6s 3.6s forwards;
+}
+@keyframes walk-across {
+  to { translate: calc(100vw + 20px) 0; }
+}
+
+/* ===================== Mystery trip ===================== */
+
+.mystery {
+  overflow: hidden;
+}
+.mystery__header {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
+  margin-bottom: clamp(48px, 7vw, 80px);
+}
+.mystery__eyebrow {
+  justify-self: center;
+  color: var(--brown-deep);
+}
+.mystery__lines {
+  display: grid;
+  gap: 4px;
+}
+.mystery__line {
+  font-size: var(--step-3);
+}
+.mystery__line:nth-child(2) {
+  color: var(--cocoa);
+}
+.mystery__fineprint {
+  font-size: var(--step-1);
+  color: var(--ink-soft);
+  transform: rotate(-2deg);
+}
+/* KT the secret-keeper: in the flow on phones, off to the side on wide screens */
+.mystery .mystery__kt {
+  position: relative;
+  width: clamp(84px, 24vw, 120px);
+  margin-top: -6px;
+}
+@media (min-width: 900px) {
+  .mystery .mystery__kt {
+    position: absolute;
+    right: 8%;
+    bottom: -30px;
+    width: 140px;
+    margin: 0;
+  }
+}
+.mystery__deco-left {
+  top: 22px;
+  left: 4%;
+  width: 60px !important;
+}
+@media (min-width: 900px) {
+  .mystery__deco-left {
+    top: 7%;
+    left: 5%;
+    width: 84px !important;
+  }
+}
+.mystery__deco-right {
+  top: 30%;
+  right: 3%;
+}
+@media (max-width: 700px) {
+  .mystery__deco-right {
+    display: none;
+  }
+}
+
+.mystery__grid {
+  display: grid;
+  gap: 40px;
+  align-items: start;
+  max-width: 980px;
+  margin-inline: auto;
+}
+@media (min-width: 860px) {
+  .mystery__grid {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+}
+
+/* ---- Countdown ticket ---- */
+
+.countdown {
+  position: relative;
+  padding: 26px 22px 24px;
+  background: #fbf3dc var(--grain);
+  color: var(--ink);
+  border-radius: 16px;
+  box-shadow: var(--shadow-paper);
+  text-align: center;
+  transform: rotate(-1.5deg);
+}
+.countdown::before,
+.countdown::after {
+  /* ticket notches */
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  border-radius: 50%;
+  background: var(--bg);
+}
+.countdown::before {
+  left: -13px;
+}
+.countdown::after {
+  right: -13px;
+}
+.countdown__label {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+.countdown__tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 16px 0 12px;
+}
+.countdown__tile {
+  display: grid;
+  padding: 10px 2px 8px;
+  background: var(--cocoa);
+  color: var(--paper-card);
+  border-radius: 10px;
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.18);
+}
+.countdown__num {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.3rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.countdown__unit {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.countdown__date {
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.countdown__arrived {
+  margin-top: 12px;
+  font-size: var(--step-2);
+}
+.countdown__map {
+  position: absolute;
+  right: -18px;
+  bottom: -38px;
+}
+
+/* ---- Guess card ---- */
+
+.guess {
+  position: relative;
+  padding: 32px clamp(20px, 4vw, 34px) 26px;
+  background: var(--paper-card);
+  color: var(--ink);
+  border-radius: 6px;
+  box-shadow: var(--shadow-paper);
+  transform: rotate(1deg);
+}
+.guess__tape {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  translate: -50% 0;
+  filter: none;
+}
+.guess__form {
+  display: grid;
+  gap: 14px;
+}
+.guess__prompt {
+  font-size: var(--step-2);
+  line-height: 1.05;
+}
+.guess__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.guess__input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  min-height: 50px;
+  padding: 0 16px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  font-size: 1rem; /* ≥16px so iOS doesn't zoom */
+}
+.guess__input:focus-visible {
+  border-color: var(--blue-ink);
+}
+.guess__btn {
+  flex: none;
+}
+.guess__reply {
+  min-height: 4.4rem;
+  margin-top: 16px;
+}
+.guess__answer {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+.guess__kt {
+  flex: none;
+  animation: pop-in 0.45s var(--ease-spring);
+}
+.guess__bubble {
+  display: inline-block;
+  padding: 8px 18px 10px;
+  background: #ece3f1;
+  border: 2px solid var(--ink);
+  border-radius: 20px 20px 20px 4px;
+  font-size: 1.5rem;
+  animation: bubble-pop 0.45s 0.08s var(--ease-spring) both;
+}
+.guess__history {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 2px dashed #ddd0bd;
+}
+.guess__history-title {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+.guess__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.guess__list li {
+  padding: 3px 12px;
+  background: #dde9f4;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Clues ---- */
+
+.clues {
+  margin-top: clamp(64px, 9vw, 96px);
+  text-align: center;
+}
+.clues__title {
+  color: var(--cocoa);
+  margin-bottom: 22px;
+}
+.clues__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+}
+.clue {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 8px;
+  width: min(100%, 250px);
+  padding: 24px 20px 22px;
+  background: var(--paper-card);
+  color: var(--ink);
+  border-radius: 6px;
+  box-shadow: var(--shadow-paper);
+  transform: rotate(var(--r));
+}
+.clue__num {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+.clue__icon {
+  color: var(--sage-ink);
+}
+.clue__text {
+  font-weight: 600;
+  line-height: 1.4;
+}
+.clue--locked {
+  background: transparent;
+  box-shadow: none;
+}
+.clue__sealed {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Static alternatives: KT just stands there instead of walking off */
+  .is-in .ending__kt,
+  .ending__kt {
+    animation: none;
+    opacity: 1;
+  }
+  .is-in .turn__kt,
+  .turn__kt {
+    animation: none;
+    translate: 12vw 0;
+  }
+  .turn__steps {
+    opacity: 1;
+  }
+}

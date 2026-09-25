@@ -1,0 +1,410 @@
+/* ===================== Destination reveal ===================== */
+
+.reveal {
+  overflow: hidden;
+}
+.reveal__header {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  margin-bottom: 36px;
+}
+.reveal__eyebrow {
+  justify-self: center;
+  color: var(--brown-deep);
+}
+.reveal__teaser {
+  font-size: var(--step-4);
+}
+
+.reveal__card {
+  position: relative;
+  max-width: 760px;
+  margin-inline: auto;
+  perspective: 1600px;
+}
+
+.reveal__inside {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  min-height: 300px;
+  align-content: center;
+  padding: clamp(40px, 7vw, 72px) clamp(20px, 5vw, 56px);
+  text-align: center;
+  color: var(--ink);
+  border-radius: 20px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(33.33% - 1px), rgb(138 90 59 / 0.18) calc(33.33% - 1px) 33.33%),
+    #f5e9d2 var(--grain);
+  box-shadow: var(--shadow-lift);
+}
+.reveal__were-going {
+  font-size: var(--step-2);
+  color: var(--cocoa);
+}
+.reveal__destination {
+  font-size: clamp(2.6rem, 1rem + 8vw, 7rem);
+  line-height: 0.92;
+  overflow-wrap: anywhere;
+  outline: none;
+}
+.reveal__tagline {
+  font-size: var(--step-1);
+  font-weight: 700;
+}
+.reveal__region {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+.reveal__spark {
+  position: absolute;
+}
+.reveal__spark--1 {
+  top: 18px;
+  left: 22px;
+}
+.reveal__spark--2 {
+  bottom: 22px;
+  right: 26px;
+}
+
+/* The closed "folded map" cover */
+.reveal__cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  border-radius: 20px;
+  color: var(--ink);
+  background: #d9c29a var(--grain);
+  box-shadow: var(--shadow-lift);
+  border: 3px dashed rgb(90 57 41 / 0.35);
+  outline: 8px solid #d9c29a;
+}
+.reveal__open {
+  font-size: var(--step-1);
+}
+
+.reveal__card.is-opening .reveal__inside {
+  animation: reveal-unfold 0.9s var(--ease-spring);
+}
+@keyframes reveal-unfold {
+  0% { transform: rotateX(-70deg) scale(0.85); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+.reveal__card.is-opening .reveal__destination {
+  animation: bubble-pop 0.7s 0.35s var(--ease-spring) both;
+}
+
+.reveal__after {
+  display: grid;
+  gap: clamp(40px, 6vw, 64px);
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+.reveal__photo {
+  max-width: 880px;
+  margin-inline: auto;
+  padding: 10px;
+  background: var(--paper-card);
+  box-shadow: var(--shadow-lift);
+  transform: rotate(-1deg);
+}
+.reveal__photo img {
+  width: 100%;
+  height: auto;
+}
+
+.reveal__illustration {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.reveal__guesses {
+  justify-self: center;
+  max-width: 34rem;
+  text-align: center;
+}
+.reveal__guesses-title {
+  font-size: var(--step-1);
+  color: var(--cocoa);
+  margin-bottom: 10px;
+}
+.reveal__guesses ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.reveal__guesses li {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--paper-card);
+  border: 1.5px solid rgb(90 57 41 / 0.2);
+  overflow-wrap: anywhere;
+}
+
+/* ===================== Itinerary ===================== */
+
+.plan {
+  display: grid;
+  gap: clamp(36px, 6vw, 56px);
+  max-width: 820px;
+  margin-inline: auto;
+  width: 100%;
+}
+.plan__intro {
+  font-size: var(--step-4);
+  text-align: center;
+  color: var(--sage-ink);
+}
+
+.plan__muted {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* Departure boarding pass */
+.plan__ticket {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  background: var(--paper-card);
+  color: var(--ink);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+  transform: rotate(-0.8deg);
+}
+.plan__ticket-main {
+  display: grid;
+  gap: 2px;
+  padding: 20px 22px;
+}
+.plan__ticket-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+.plan__ticket-time {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-weight: 700;
+  font-size: var(--step-2);
+  line-height: 1.1;
+}
+.plan__ticket-stub {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  padding: 16px 20px;
+  border-left: 3px dashed #d8cdbd;
+  background: #fbf3dc;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 11rem;
+}
+.plan__ticket-note {
+  grid-column: 1 / -1;
+  padding: 0 22px 16px;
+  font-size: 1.3rem;
+  color: var(--cocoa);
+}
+
+/* Route */
+.plan__route {
+  display: grid;
+  gap: clamp(40px, 6vw, 56px);
+}
+.plan__day {
+  display: grid;
+  gap: 18px;
+}
+.plan__day-tag {
+  justify-self: start;
+  display: grid;
+  gap: 2px;
+  padding: 14px 22px 14px 40px;
+  background: #ead7b4 var(--grain);
+  color: var(--ink);
+  clip-path: polygon(20px 0, 100% 0, 100% 100%, 20px 100%, 0 50%);
+  transform: rotate(-1.5deg);
+  box-shadow: var(--shadow-paper);
+}
+.plan__day-date {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.plan__day-title {
+  font-size: var(--step-3);
+}
+.plan__day-subtitle {
+  font-size: 1.35rem;
+  color: var(--cocoa);
+}
+
+.plan__items {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding-left: 30px;
+}
+.plan__items::before {
+  /* the dashed road */
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 8px;
+  bottom: 8px;
+  border-left: 3px dashed rgb(86 103 75 / 0.45);
+}
+.plan__item {
+  position: relative;
+  display: grid;
+  padding: 16px 18px 16px 30px;
+  background: var(--paper-card);
+  color: var(--ink);
+  border-radius: 14px;
+  box-shadow: var(--shadow-paper);
+}
+.plan__item-dot {
+  position: absolute;
+  left: -34px;
+  top: 12px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fbf3dc;
+  color: var(--ink);
+  border: 2.5px solid var(--sage-ink);
+}
+.plan__item-body {
+  display: grid;
+  gap: 4px;
+}
+.plan__item-time {
+  font-size: 1.35rem;
+  color: var(--cocoa);
+}
+.plan__item-title {
+  font-weight: 800;
+  font-size: var(--step-1);
+  line-height: 1.25;
+}
+.plan__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.plan__chips:empty {
+  display: none;
+}
+.plan__chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #dde9f4;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.plan__item-note {
+  font-size: 1.3rem;
+  color: var(--coral-ink);
+}
+
+/* Extras */
+.plan__extras {
+  display: grid;
+  gap: 20px;
+}
+@media (min-width: 700px) {
+  .plan__extras {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.plan__card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 22px 22px 20px;
+  background: var(--paper-card);
+  color: var(--ink);
+  border-radius: 6px;
+  box-shadow: var(--shadow-paper);
+}
+.plan__card:nth-child(odd) {
+  transform: rotate(-1deg);
+}
+.plan__card:nth-child(even) {
+  transform: rotate(1.2deg);
+}
+.plan__card-icon {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  color: var(--sage-ink);
+}
+.plan__card-title {
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+.plan__lodging-name {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-weight: 700;
+  font-size: var(--step-2);
+  line-height: 1.1;
+  padding-right: 40px;
+}
+.plan__card-note {
+  font-size: 1.3rem;
+  color: var(--coral-ink);
+}
+.plan__card--packing {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 29px, rgb(142 201 240 / 0.5) 29px 31px) 0 44px / 100% calc(100% - 44px) no-repeat,
+    var(--paper-card);
+}
+.plan__checklist {
+  display: grid;
+  gap: 0;
+  line-height: 31px;
+}
+.plan__checklist li::before {
+  content: '☐ ';
+  color: var(--sage-ink);
+  font-weight: 700;
+}
+
+.plan__map {
+  text-align: center;
+}
+.plan__map .doodle {
+  display: inline-block;
+}
+
+.plan__inline-icon {
+  display: inline-block;
+  vertical-align: -3px;
+  color: var(--sage-ink);
+}

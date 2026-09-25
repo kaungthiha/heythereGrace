@@ -1,0 +1,161 @@
+.photo {
+  position: relative;
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.photo__mount {
+  position: relative;
+}
+.photo__media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--paper-warm);
+}
+
+.photo__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-out);
+}
+.photo__img.is-loaded {
+  opacity: 1;
+}
+
+/* ---- Frame variants ---- */
+
+.photo--polaroid {
+  background: var(--paper-card);
+  padding: 10px 10px 0;
+  box-shadow: var(--shadow-paper);
+}
+.photo--polaroid .photo__caption {
+  min-height: 3.2em;
+  padding: 0.45em 0.2em 0.6em;
+  text-align: center;
+  color: var(--ink);
+}
+.photo--polaroid:not(:has(.photo__caption)) {
+  padding-bottom: 44px;
+}
+
+.photo--taped {
+  background: var(--paper-card);
+  padding: 8px;
+  box-shadow: var(--shadow-paper);
+}
+.photo--taped .photo__caption {
+  padding: 0.6em 0.2em 0.2em;
+  color: var(--ink);
+}
+
+.photo--plain .photo__media {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-paper);
+}
+.photo--plain .photo__caption {
+  padding-top: 0.6em;
+}
+
+.photo--bare .photo__caption {
+  padding-top: 0.5em;
+}
+
+/* ---- Caption ---- */
+
+.photo__caption {
+  display: grid;
+  gap: 0.15em;
+}
+.photo__caption-text {
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  line-height: 1.1;
+}
+.photo__meta {
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.photo__footnote {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* ---- Placeholder ---- */
+
+.photo__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.35em;
+  padding: 12px;
+  text-align: center;
+  color: var(--ink-soft);
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 11px, rgb(90 70 50 / 0.05) 11px 13px),
+    linear-gradient(160deg, #f8efe0, #efe2cf);
+  outline: 2px dashed rgb(90 70 50 / 0.25);
+  outline-offset: -10px;
+}
+.photo__placeholder-label {
+  max-width: 22ch;
+  font-size: clamp(0.66rem, 0.6rem + 0.3vw, 0.8rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+}
+.photo__placeholder-hint {
+  font-size: 1.15rem;
+  color: var(--ink-faint);
+}
+
+/* ---- Pointer arrow + label ---- */
+
+.photo__pointer {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  color: var(--paper);
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.45));
+}
+.photo__pointer-arrow {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: rotate(-15deg);
+}
+.photo__pointer-label {
+  position: absolute;
+  right: 40px;
+  bottom: 38px;
+  width: max-content;
+  max-width: 14ch;
+  font-size: 1.3rem;
+  text-align: right;
+}
+
+/* ---- Tape + photo-corner stickers ---- */
+
+.photo__tape {
+  position: absolute;
+  z-index: 3;
+  top: -18px;
+  left: 50%;
+  translate: -50% 0;
+}
+.photo__corner {
+  position: absolute;
+  z-index: 3;
+  filter: none;
+}
+.photo__corner--tl { top: -8px; left: -8px; }
+.photo__corner--tr { top: -8px; right: -8px; }
+.photo__corner--br { bottom: -8px; right: -8px; }
+.photo__corner--bl { bottom: -8px; left: -8px; }

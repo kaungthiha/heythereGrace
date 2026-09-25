@@ -1,0 +1,3 @@
+# Discourages search-engine indexing. This does NOT make the site private.
+User-agent: *
+Disallow: /

@@ -1,0 +1,25 @@
+# dependencies & build output
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+
+# ---- PRIVATE: never commit before the reveal ----
+# Planning notes that name the destination
+CLAUDE.local.md
+# Secret destination terms used by `npm run check:secrets`
+.secret-terms
+# Real trip content (only imported by the revealed build)
+src/content/reveal/trip.ts
+src/content/reveal/assets/
+
+# Original, unoptimized photos (large + may contain EXIF/GPS). Optimized copies go in public/images/.
+photos-original/
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log

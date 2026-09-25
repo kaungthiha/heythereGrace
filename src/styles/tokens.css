@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Design tokens — follows DESIGN_LANGUAGE.md (warm, soft, muted; paper on paper).
+   Bright-ish colors are for paper, stickers and doodles. Text uses --ink or the *-ink
+   shades, which keep WCAG AA contrast on every paper tint below.
+   ========================================================================== */
+
+:root {
+  /* Paper + ink */
+  --paper: #f8f1e4;
+  --paper-warm: #f2e4d2;
+  --paper-card: #fffaf1; /* warm white for cards/polaroids — never pure white */
+  --ink: #332b27;
+  --ink-soft: #645a54;
+  --ink-faint: #8a7f77;
+
+  /* Accents */
+  --cocoa: #8c5a3c;
+  --brown-deep: #5a3929;
+  --coral: #f27c6b;
+  --coral-ink: #b24a39;
+  --peach: #f2b49d;
+  --butter: #f6c85f;
+  --butter-soft: #fbf0d2;
+  --powder-blue: #a9cbea;
+  --blue-ink: #3f6c93;
+  --sage: #a9b79d;
+  --sage-ink: #56674b;
+  --lavender: #bda9d4;
+  --lavender-ink: #6a5a8a;
+  --blush: #efa6a6;
+
+  /* Type */
+  --font-body: 'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-hand: 'Caveat Variable', 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
+
+  --step--1: clamp(0.84rem, 0.8rem + 0.15vw, 0.92rem);
+  --step-0: clamp(1.02rem, 0.97rem + 0.25vw, 1.15rem);
+  --step-1: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  --step-2: clamp(1.6rem, 1.3rem + 1.4vw, 2.4rem);
+  --step-3: clamp(2.2rem, 1.5rem + 3.2vw, 4rem);
+  --step-4: clamp(2.7rem, 1.6rem + 5.4vw, 6rem);
+  --step-5: clamp(3.2rem, 1.4rem + 8.4vw, 8.4rem);
+
+  /* Shape + depth: paper on paper, never glossy */
+  --radius-sm: 6px;
+  --radius: 14px;
+  --radius-paper: 18px;
+  --shadow-paper:
+    0 8px 20px rgb(72 48 34 / 0.1),
+    0 2px 6px rgb(72 48 34 / 0.08);
+  --shadow-lift:
+    0 16px 34px rgb(72 48 34 / 0.14),
+    0 3px 8px rgb(72 48 34 / 0.08);
+  --sticker-shadow: drop-shadow(0 4px 8px rgb(63 42 31 / 0.1));
+
+  /* Motion (DESIGN_LANGUAGE §12): UI 300–650ms, story 600–1000ms */
+  --motion-fast: 300ms;
+  --motion-base: 500ms;
+  --motion-story: 850ms;
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout */
+  --gutter: clamp(16px, 5vw, 48px);
+  --maxw: 1120px;
+  --focus: 0 0 0 3px var(--paper-card), 0 0 0 6px var(--blue-ink);
+
+  /* Subtle warm paper grain */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Faint grid paper */
+  --grid: linear-gradient(rgb(63 108 147 / 0.07) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, rgb(63 108 147 / 0.07) 1px, transparent 1px) 0 0 / 22px 22px;
+}
+
+/* --------------------------------------------------------------------------
+   Chapter paper tints. Put data-palette="…" on a section. The shifts are gentle on
+   purpose — every chapter is a page of the same scrapbook.
+   -------------------------------------------------------------------------- */
+[data-palette] {
+  --text: var(--ink);
+  --text-soft: var(--ink-soft);
+}
+/* Birthday opening: cream, coral, butter, blush */
+[data-palette='blush'] { --bg: #faeee6; --accent: var(--coral); --accent-ink: var(--coral-ink); }
+/* Relationship memories: cream, powder blue, peach, sage */
+[data-palette='cream'] { --bg: var(--paper); --accent: var(--coral); --accent-ink: var(--coral-ink); }
+[data-palette='peach'] { --bg: #f9eadf; --accent: var(--peach); --accent-ink: var(--coral-ink); }
+[data-palette='blue'] { --bg: #eaf0f3; --accent: var(--powder-blue); --accent-ink: var(--blue-ink); }
+[data-palette='sage'] { --bg: #eef0e5; --accent: var(--sage); --accent-ink: var(--sage-ink); }
+[data-palette='lavender'] { --bg: #f1ebf0; --accent: var(--lavender); --accent-ink: var(--lavender-ink); }
+/* Quiet / emotional: warm paper, cocoa, muted blush */
+[data-palette='warm'] { --bg: var(--paper-warm); --accent: var(--blush); --accent-ink: var(--cocoa); }
+/* Mystery trip: cream, sage, powder blue, cocoa, restrained yellow */
+[data-palette='mystery'] { --bg: #eceee2; --accent: var(--butter); --accent-ink: var(--cocoa); }
+/* Reveal: more outdoor tones, same paper world */
+[data-palette='trail'] { --bg: #e3e8d7; --accent: var(--sage); --accent-ink: var(--sage-ink); }
