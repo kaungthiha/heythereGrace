@@ -40,7 +40,7 @@ src/content/          ← everything you'd edit: words, photos, chapters, trip t
   site.ts             central config: names, dates, reveal date/time/zone, revealMode
   story.ts            relationship chapters (order, layout, photos, mascot cameo)
   photos.ts           photo manifest (one entry per photo, referenced by id)
-  loveNotes.ts  stats.ts  letter.ts  tripTeaser.ts
+  stats.ts  letter.ts  tripTeaser.ts
   reveal/             none.ts (teaser), trip.mock.ts (fake), trip.ts (REAL — gitignored)
 src/sections/         one component per part of the story
 src/components/       PhotoFrame, Sticker, Doodle, PaperLabel, ChapterNav, …
@@ -110,6 +110,11 @@ files.
 
 ---
 
+## Credits & copyrights
+
+The song, fonts, stickers and code libraries are credited in [CREDITS.md](CREDITS.md). Keep it
+up to date when you add anything you didn't make.
+
 ## Design notes
 
 Visual rules live in `DESIGN_LANGUAGE.md`, which wins over `CLAUDE.md` on visual questions. In short:
@@ -129,7 +134,7 @@ Deliberate choices:
   cover everything, which keeps the JavaScript small (~84 KB gzipped, mostly React).
 - **Simple SVG doodles** (underlines, circled dates, itinerary icons) are still hand-coded, because the
   sticker sheets don't cover them and they need to scale or draw themselves on.
-- **Time zone:** the reveal and clue unlocks default to `America/New_York`. Change `revealTimeZone` in
+- **Time zone:** the reveal countdown defaults to `America/New_York`. Change `revealTimeZone` in
   `site.ts` if you're elsewhere.
 
 Tested in Chrome at 390px and 1280px, with and without reduced motion. Still worth checking by hand

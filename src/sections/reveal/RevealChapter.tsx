@@ -86,6 +86,11 @@ export default function RevealChapter() {
             {destination.image ? (
               <figure className="reveal__photo rv rv--pop">
                 <img src={destination.image.src} alt={destination.image.alt} width={destination.image.width} height={destination.image.height} loading="lazy" decoding="async" />
+                {destination.image.credit && (
+                  <figcaption className="reveal__credit">
+                    <T>{destination.image.credit}</T>
+                  </figcaption>
+                )}
               </figure>
             ) : (
               <div className="reveal__illustration rv rv--pop" aria-hidden="true">
@@ -93,6 +98,12 @@ export default function RevealChapter() {
                 <Sticker name="trip/kt-suitcase" width="clamp(120px, 30vw, 190px)" />
                 <Sticker name="trip/compass" width="clamp(76px, 18vw, 116px)" rotate={8} />
               </div>
+            )}
+
+            {tripReveal.postscript && (
+              <p className="reveal__postscript scribble-note rv" style={{ '--i': 2, '--r': '-3deg' } as CSSProperties}>
+                <T>{tripReveal.postscript}</T>
+              </p>
             )}
 
             {guesses.length > 0 && (

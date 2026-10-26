@@ -10,16 +10,18 @@ import { tripClues, tripTeaser } from '../content/tripTeaser';
 import { useInView } from '../hooks/useInView';
 import { useNow } from '../hooks/useNow';
 import { countdownTo, formatDate, zonedTimeToInstant } from '../utils/dates';
-import { addGuess, isRepeat, loadGuesses, replyFor, type Guess } from '../utils/guesses';
+import { addGuess, cluesUnlocked, isRepeat, loadGuesses, replyFor, type Guess } from '../utils/guesses';
 import './trip.css';
 
 /**
- * The mystery trip teaser: countdown, guessing game and clues.
+ * The mystery trip teaser: a limited number of guesses, each unlocking the next clue, then the countdown.
  * This component ships in the PUBLIC teaser build — it contains no destination and does no answer checking.
  */
 export function MysteryTrip() {
   const ref = useInView<HTMLElement>();
   const { mystery } = tripTeaser;
+  const [guesses, setGuesses] = useState<Guess[]>(loadGuesses);
+  const outOfGuesses = guesses.length >= tripTeaser.guess.maxGuesses;
 
   return (
     <section id="mystery" ref={ref} className="section mystery" data-palette="mystery" aria-labelledby="mystery-title">
@@ -47,11 +49,11 @@ export function MysteryTrip() {
         </header>
 
         <div className="mystery__grid">
-          <Countdown />
-          <GuessForm />
+          {outOfGuesses ? <Countdown /> : <LockedCountdown />}
+          <GuessForm guesses={guesses} onGuess={setGuesses} />
         </div>
 
-        <Clues />
+        <Clues unlocked={cluesUnlocked(guesses.length, tripClues.length)} />
       </div>
 
       <Sticker name="trip/question" width={84} rotate={-8} className="deco mystery__deco-left" style={{ '--i': 1 } as CSSProperties} />
@@ -102,24 +104,43 @@ export function Countdown() {
   );
 }
 
+function LockedCountdown() {
+  const { countdown } = tripTeaser;
+  return (
+    <div className="countdown countdown--locked rv rv--left">
+      <p className="countdown__label">{countdown.lockedLabel}</p>
+      <Sticker name="trip/envelope-sealed" width={140} rotate={-4} className="countdown__envelope" />
+      <p className="countdown__locked hand">{countdown.locked}</p>
+    </div>
+  );
+}
+
 /* ---------------- Guessing game ---------------- */
 
-export function GuessForm() {
+const fill = (template: string, values: Record<string, number>) => template.replace(/\{(\w+)\}/g, (_, k: string) => String(values[k] ?? ''));
+
+export function GuessForm({ guesses, onGuess }: { guesses: Guess[]; onGuess: (next: Guess[]) => void }) {
   const { guess } = tripTeaser;
   const inputId = useId();
-  const [guesses, setGuesses] = useState<Guess[]>(loadGuesses);
   const [value, setValue] = useState('');
-  const [reply, setReply] = useState<{ text: string; n: number } | null>(null);
+  const [reply, setReply] = useState<{ text: string; clue: number | null; n: number } | null>(null);
+  const left = Math.max(0, guess.maxGuesses - guesses.length);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const text = value.trim();
-    if (!text) return;
+    if (!text || left === 0) return;
     // The reply never looks at whether the guess is right. There is no answer in this build.
     const repeat = isRepeat(text, guesses);
     const next = repeat ? guesses : addGuess(text, guesses);
-    setGuesses(next);
-    setReply({ text: repeat ? guess.repeatResponse : replyFor(next.length - 1, guess.responses), n: (reply?.n ?? 0) + 1 });
+    const before = cluesUnlocked(guesses.length, tripClues.length);
+    const after = cluesUnlocked(next.length, tripClues.length);
+    onGuess(next);
+    setReply({
+      text: repeat ? guess.repeatResponse : replyFor(next.length - 1, guess.responses),
+      clue: after > before ? after : null,
+      n: (reply?.n ?? 0) + 1,
+    });
     setValue('');
   };
 
@@ -130,29 +151,37 @@ export function GuessForm() {
         <label htmlFor={inputId} className="guess__prompt display">
           {guess.prompt}
         </label>
-        <div className="guess__row">
-          <input
-            id={inputId}
-            className="guess__input"
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={guess.placeholder}
-            autoComplete="off"
-            maxLength={200}
-            enterKeyHint="send"
-          />
-          <button type="submit" className="btn guess__btn">
-            {guess.button}
-          </button>
-        </div>
+        {left === 0 ? (
+          <p className="guess__done hand">{guess.outOfGuesses}</p>
+        ) : (
+          <div className="guess__row">
+            <input
+              id={inputId}
+              className="guess__input"
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={guess.placeholder}
+              autoComplete="off"
+              maxLength={200}
+              enterKeyHint="send"
+            />
+            <button type="submit" className="btn guess__btn">
+              {guess.button}
+            </button>
+          </div>
+        )}
+        {left > 0 && <p className="guess__left">{fill(guess.left, { n: left, max: guess.maxGuesses })}</p>}
       </form>
 
       <div className="guess__reply" aria-live="polite">
         {reply && (
           <p key={reply.n} className="guess__answer">
             <Sticker name="trip/kt-secret-closeup" width={64} rotate={-4} className="guess__kt" />
-            <span className="guess__bubble hand">{reply.text}</span>
+            <span className="guess__bubble hand">
+              {reply.text}
+              {reply.clue && <small className="guess__clue-note">{fill(guess.clueUnlocked, { n: reply.clue })}</small>}
+            </span>
           </p>
         )}
       </div>
@@ -180,9 +209,7 @@ function ClueIcon({ icon }: { icon: string }) {
   return <Doodle name={icon} size={34} className="clue__icon" />;
 }
 
-function Clues() {
-  const now = useNow(60_000);
-  const tz = siteConfig.trip.revealTimeZone;
+function Clues({ unlocked }: { unlocked: number }) {
   if (tripClues.length === 0) return null;
 
   return (
@@ -190,8 +217,7 @@ function Clues() {
       <h3 className="clues__title eyebrow">{tripTeaser.clues.title}</h3>
       <ul className="clues__list" role="list">
         {tripClues.map((clue, i) => {
-          const unlockAt = clue.unlockDate ? zonedTimeToInstant(clue.unlockDate, '00:00', tz) : null;
-          const locked = !!unlockAt && unlockAt > now;
+          const locked = i >= unlocked;
           return (
             <li key={clue.id} className={`clue rv rv--pop ${locked ? 'clue--locked' : ''}`} style={{ '--i': i + 1, '--r': `${i % 2 ? 2 : -2}deg` } as CSSProperties}>
               <span className="clue__num">#{i + 1}</span>
@@ -199,7 +225,7 @@ function Clues() {
                 <>
                   <Sticker name="trip/envelope-sealed" width={120} rotate={-3} className="clue__envelope" />
                   <p className="clue__sealed">
-                    {tripTeaser.clues.lockedLabel} {formatDate(clue.unlockDate!, { month: 'short', day: 'numeric' })}
+                    {tripTeaser.clues.lockedLabel} #{i}
                   </p>
                 </>
               ) : (

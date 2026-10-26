@@ -1,16 +1,16 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { ChapterNav, type NavChapter } from './components/ChapterNav';
 import { SoundToggle } from './components/SoundToggle';
 import { BirthdayHero } from './sections/BirthdayHero';
 import { BirthdayIntro } from './sections/BirthdayIntro';
 import { BirthdayLetter } from './sections/BirthdayLetter';
 import { ClosingScene } from './sections/ClosingScene';
-import { LoveNotes } from './sections/LoveNotes';
 import { MysteryTrip } from './sections/MysteryTrip';
 import { OneMoreThing } from './sections/OneMoreThing';
 import { RelationshipStats } from './sections/RelationshipStats';
 import { Story } from './sections/story/Story';
 import { prefersReducedMotion } from './utils/motion';
+import { setUpSoundtrack } from './utils/soundtrack';
 import { readJSON, STORAGE_KEYS, writeJSON } from './utils/storage';
 import './sections/BirthdayIntro.css';
 
@@ -24,7 +24,6 @@ const RevealChapter = REVEALED ? lazy(() => import('./sections/reveal/RevealChap
 const CHAPTERS: NavChapter[] = [
   { id: 'birthday', label: 'Birthday' },
   { id: 'us', label: 'Us' },
-  { id: 'love', label: 'You' },
   { id: 'letter', label: 'A Letter' },
   { id: 'one-more-thing', label: 'One More Thing' },
   ...(REVEALED ? [{ id: 'plan', label: 'The Plan' }] : []),
@@ -35,6 +34,8 @@ type IntroState = 'showing' | 'closing' | 'gone';
 export default function App() {
   // Returning visitors skip the intro (they can replay it from the ending).
   const [intro, setIntro] = useState<IntroState>(() => (readJSON(STORAGE_KEYS.introOpened, false) ? 'gone' : 'showing'));
+
+  useEffect(setUpSoundtrack, []);
 
   const finishIntro = () => {
     writeJSON(STORAGE_KEYS.introOpened, true);
@@ -75,7 +76,6 @@ export default function App() {
       <main>
         <BirthdayHero />
         <Story />
-        <LoveNotes />
         <RelationshipStats />
         <BirthdayLetter />
         <OneMoreThing />

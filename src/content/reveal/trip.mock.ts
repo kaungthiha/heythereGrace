@@ -12,6 +12,7 @@ const tripReveal: TripRevealContent = {
     region: 'Low lunar orbit',
     // image: { src: heroImage, alt: 'Describe the photo', width: 1600, height: 1067 },
   },
+  postscript: 'P.S. you owe Kaung 100 bucks.',
   planIntro: 'Here’s the plan.',
   departure: {
     time: 'Friday, 8:00 AM',

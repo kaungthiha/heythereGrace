@@ -49,6 +49,16 @@ loads immediately.
 - `npm run optimize-images -- --force` redoes everything. `-- --clean` deletes files for originals you
   removed.
 
+### Add a short video
+
+Same steps as a photo: drop the `.mp4`/`.mov` into `photos-original/`, run `npm run optimize-images`,
+and use the printed name as `src`. The script converts it to a 720p H.264 MP4 in `public/videos/`
+(phone HDR is tone-mapped, all metadata including GPS is removed) and makes a poster image from its
+first moments. On the page it shows the poster with play controls. Videos never autoplay, and nothing
+downloads until she presses play. Keep clips short (under ~20s): a 15s clip ends up around 5 MB.
+Start the alt text with "Video:". Videos work in every layout, but not well in the polaroid stack,
+where tapping is already used to flip through the stack.
+
 ### Alt text
 Describe what's in the photo as you'd tell someone on the phone ("Grace holding a giant pretzel,
 laughing"). Screen readers read it, and it shows if a photo fails to load.
@@ -107,7 +117,6 @@ chapters, and not in the quiet or intimate ones.
 | Opening message, hero photo, subtitle | `site.ts` → `hero` | `hero.photo` is a photo id |
 | "25th birthday" sticker | `site.ts` → `person.ageOrdinal` | `null` hides it. The birth year is never shown |
 | Your signature | `site.ts` → `author.name` | Used at the end of the letter |
-| Things I love about you | `loveNotes.ts` | Short sentences. `icon` is optional: `star`, `heart`, `sparkle`, `flower` |
 | Us, by the numbers | `stats.ts` | Days together is calculated live. Add only real numbers; if the list is empty, nothing extra shows in production |
 | Birthday letter | `letter.ts` | One string per paragraph. `photo: null` removes the photo |
 | Closing scene | `site.ts` → `closing` | One photo, one line, your message |
@@ -121,9 +130,12 @@ Everything in `src/content/tripTeaser.ts` **is public in the teaser build**. Nev
 destination or hints that give it away here.
 
 - **Wording:** `tripTeaser.ending`, `.turn`, `.mystery`.
-- **Guess replies:** `tripTeaser.guess.responses`. They cycle in order and never depend on the guess.
-- **Clues:** `tripClues`. A clue with `unlockDate: '2026-10-27'` shows as a sealed envelope until
-  midnight that day in the trip's time zone. `icon` can be a trip sticker name (`compass`, `suitcase`,
+- **Guesses:** she gets `tripTeaser.guess.maxGuesses` (5). Each guess gets the next reply from
+  `tripTeaser.guess.responses` (in order, never depending on what she typed) and unlocks the next clue.
+  Repeating an earlier guess doesn't use one up. After the last guess the form closes and the reveal
+  countdown appears; before that, the countdown is a sealed envelope.
+- **Clues:** `tripClues`, in unlock order. #1 is visible from the start, guess #1 unlocks #2, and so on.
+  Keep at most `maxGuesses + 1` clues. `icon` can be a trip sticker name (`compass`, `suitcase`,
   `map`, `backpack`, `luggage-tag`, `cloud`, `footsteps`) or a doodle name. Delete all clues to hide the
   board. A locked clue's text is still in the page source, so only use hints you'd be fine with her
   finding early.
@@ -151,9 +163,15 @@ destination or hints that give it away here.
 ---
 
 ## Soundtrack (optional)
-Put an audio file you have the rights to in `public/audio/` and set
-`site.ts → soundtrack: { src: 'audio/song.mp3', label: 'Song name' }`. A small button appears. It
-never autoplays.
+Currently `public/audio/soundtrack.mp3` (metadata stripped; the original is in the gitignored
+`photos-original/audio/`). To change it, replace the file or point
+`site.ts → soundtrack: { src: 'audio/song.mp3', label: 'Song name' }` at another one. Set it to `null` to remove
+the music and the button.
+
+It loops for the whole visit. Browsers block sound until the visitor interacts, so it starts on her first
+tap, click or keypress (opening the present counts). The 🔊/🔇 button in the top corner mutes it, and a mute
+is remembered on later visits. It pauses while a story video plays and resumes afterwards. The logic is in
+`src/utils/soundtrack.ts`.
 
 ## Easter eggs
 Tapping the hearts next to the hero photo bursts confetti. The "open the present again" button at the

@@ -22,9 +22,6 @@ export function ClosingScene({ onReplayIntro }: { onReplayIntro: () => void }) {
         <h2 id="closing-title" className="display closing__line rv" style={{ '--i': 2 } as CSSProperties}>
           {closing.line}
         </h2>
-        <p className="closing__message rv" style={{ '--i': 3 } as CSSProperties}>
-          <T>{closing.message}</T>
-        </p>
         <p className="closing__signoff hand rv" style={{ '--i': 4 } as CSSProperties}>
           <T>{closing.signoff}</T>
         </p>

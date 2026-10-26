@@ -4,10 +4,7 @@ import { prefersReducedMotion } from '../../utils/motion';
 import { wobble } from '../../utils/random';
 import type { LayoutProps } from './Story';
 
-/**
- * A little pile of polaroids. Tap the top one (or "next") and it slides to the back of the pile.
- * Only the top photo is exposed to screen readers; the counter announces position.
- */
+
 export function PolaroidStack({ chapter, photos }: LayoutProps) {
   const [order, setOrder] = useState(() => photos.map((_, i) => i));
   const [leaving, setLeaving] = useState<number | null>(null);

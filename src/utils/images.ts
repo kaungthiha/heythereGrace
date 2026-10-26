@@ -2,7 +2,7 @@ import generated from '../content/photos.generated.json';
 import type { Orientation, Photo } from '../content/types';
 
 /** Shape written by scripts/optimize-images.mjs. */
-type GeneratedImage = { w: number; h: number; widths: number[]; formats: string[]; color: string };
+type GeneratedImage = { w: number; h: number; widths: number[]; formats: string[]; color: string; video?: string };
 const manifest = generated as Record<string, GeneratedImage>;
 
 export type ResolvedImage =
@@ -13,6 +13,8 @@ export type ResolvedImage =
       color: string;
       fallback: string;
       sources: { type: string; srcSet: string }[];
+      /** Set for videos: URL of the MP4 (the rest describes its poster image). */
+      video?: string;
     }
   | { kind: 'raw'; src: string }
   | { kind: 'placeholder' };
@@ -35,6 +37,7 @@ export function resolveImage(photo: Photo): ResolvedImage {
       color: entry.color,
       fallback: url(src, entry.widths[Math.min(1, entry.widths.length - 1)], fallbackFormat),
       sources: entry.formats.map((f) => ({ type: `image/${f}`, srcSet: srcSet(f) })),
+      video: entry.video ? `${base}videos/${entry.video}` : undefined,
     };
   }
 

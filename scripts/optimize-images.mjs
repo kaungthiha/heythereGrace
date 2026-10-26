@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * Photo pipeline. Never modifies originals.
+ * Photo + video pipeline. Never modifies originals.
  *
  *   photos-original/**            → public/images/<name>-<width>.{avif,webp}  + src/content/photos.generated.json
+ *   photos-original/**.{mp4,mov}  → public/videos/<name>.mp4 + a poster image under the same <name>
  *   photos-original/reveal/**     → src/content/reveal/assets/<name>.webp      (reveal-only; gitignored)
  *
  * - auto-rotates using EXIF orientation, then strips ALL metadata (GPS, camera, dates)
  * - makes 480 / 960 / 1600px widths (never upscales)
+ * - videos: 720p H.264/AAC MP4 at 30fps with all metadata (incl. GPS location) removed; plays in every browser
  * - records each photo's size + average color so the page reserves space while loading
  * - skips photos that are already up to date (use --force to redo everything)
  *
@@ -14,14 +16,19 @@
  *   npm run optimize-images -- --force
  *   npm run optimize-images -- --clean     also delete optimized files whose original is gone
  */
+import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { basename, extname, join, relative } from 'node:path';
+import { promisify } from 'node:util';
+import ffmpegPath from 'ffmpeg-static';
 import sharp from 'sharp';
 
+const run = promisify(execFile);
 const root = fileURLToPath(new URL('..', import.meta.url));
 const SRC = join(root, 'photos-original');
 const OUT = join(root, 'public/images');
+const VIDEO_OUT = join(root, 'public/videos');
 const REVEAL_SRC = join(SRC, 'reveal');
 const REVEAL_OUT = join(root, 'src/content/reveal/assets');
 const MANIFEST = join(root, 'src/content/photos.generated.json');
@@ -29,6 +36,7 @@ const MANIFEST = join(root, 'src/content/photos.generated.json');
 const WIDTHS = [480, 960, 1600];
 const FORMATS = { avif: { quality: 52, effort: 4 }, webp: { quality: 78 } };
 const EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.tif', '.tiff', '.heic', '.heif']);
+const VIDEO_EXTS = new Set(['.mp4', '.mov', '.m4v']);
 
 const args = new Set(process.argv.slice(2));
 const force = args.has('--force');
@@ -49,7 +57,8 @@ const secretTerms = existsSync(join(root, '.secret-terms'))
 const walk = (dir) =>
   readdirSync(dir).flatMap((name) => {
     const p = join(dir, name);
-    return statSync(p).isDirectory() ? walk(p) : EXTS.has(extname(name).toLowerCase()) ? [p] : [];
+    const ext = extname(name).toLowerCase();
+    return statSync(p).isDirectory() ? walk(p) : EXTS.has(ext) || VIDEO_EXTS.has(ext) ? [p] : [];
   });
 
 const slugify = (s) =>
@@ -61,6 +70,7 @@ const slugify = (s) =>
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '') || 'photo';
 
+const isVideo = (f) => VIDEO_EXTS.has(extname(f).toLowerCase());
 const hex = (n) => Math.round(n).toString(16).padStart(2, '0');
 
 const manifest = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, 'utf8')) : {};
@@ -72,7 +82,58 @@ const problems = [];
 
 const all = walk(SRC);
 const regular = all.filter((f) => !f.startsWith(REVEAL_SRC));
-const reveal = all.filter((f) => f.startsWith(REVEAL_SRC));
+const reveal = all.filter((f) => f.startsWith(REVEAL_SRC) && !isVideo(f));
+all.filter((f) => f.startsWith(REVEAL_SRC) && isVideo(f)).forEach((f) => problems.push(`${relative(root, f)}: videos aren't supported in reveal/ yet.`));
+
+/** Web-sized AVIF/WebP copies of one image (a path or a buffer); returns its manifest entry. */
+async function optimizeImage(input, name) {
+  // rotate() applies EXIF orientation; sharp drops all metadata on output unless asked to keep it.
+  const { data, info } = await sharp(input, { failOn: 'none' }).rotate().toBuffer({ resolveWithObject: true });
+  const widths = WIDTHS.filter((w) => w < info.width);
+  if (widths.length < WIDTHS.length) widths.push(Math.min(info.width, WIDTHS[WIDTHS.length - 1]));
+  const uniqueWidths = [...new Set(widths)].sort((a, b) => a - b);
+
+  mkdirSync(OUT, { recursive: true });
+  for (const w of uniqueWidths) {
+    for (const [format, options] of Object.entries(FORMATS)) {
+      await sharp(data).resize({ width: w, withoutEnlargement: true }).toFormat(format, options).toFile(join(OUT, `${name}-${w}.${format}`));
+    }
+  }
+  const { dominant } = await sharp(data).resize(32).stats();
+  return {
+    w: info.width,
+    h: info.height,
+    widths: uniqueWidths,
+    formats: Object.keys(FORMATS),
+    color: `#${hex(dominant.r)}${hex(dominant.g)}${hex(dominant.b)}`,
+  };
+}
+
+/** Transcodes one video to public/videos/<name>.mp4 and returns a PNG frame from its start (the poster). */
+async function transcodeVideo(file, name) {
+  mkdirSync(VIDEO_OUT, { recursive: true });
+  const out = join(VIDEO_OUT, `${name}.mp4`);
+  // Phones record HDR (HLG/PQ); browsers show 8-bit HDR tags inconsistently, so tone-map to plain SDR.
+  const probe = await run(ffmpegPath, ['-hide_banner', '-i', file]).catch((err) => err);
+  const hdr = /arib-std-b67|smpte2084/.test(probe.stderr ?? '');
+  const toSdr = hdr ? 'zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,' : '';
+  // Short side <=720px. -map_metadata -1 (global + per-stream) drops GPS location, dates and device tags.
+  await run(ffmpegPath, [
+    '-y', '-v', 'error', '-i', file,
+    '-map', '0:v:0', '-map', '0:a:0?',
+    '-map_metadata', '-1', '-map_metadata:s:v', '-1', '-map_metadata:s:a', '-1', '-map_chapters', '-1',
+    '-vf', `${toSdr}scale='if(gt(iw,ih),-2,min(720,iw))':'if(gt(iw,ih),min(720,ih),-2)',fps=30,format=yuv420p`,
+    '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '26', '-profile:v', 'high',
+    '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', '-fflags', '+bitexact',
+    out,
+  ]);
+  const { stdout } = await run(ffmpegPath, ['-v', 'error', '-ss', '0.4', '-i', out, '-frames:v', '1', '-f', 'image2pipe', '-c:v', 'png', '-'], {
+    encoding: 'buffer',
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  return stdout;
+}
 
 for (const file of regular) {
   let name = slugify(basename(file, extname(file)));
@@ -84,11 +145,15 @@ for (const file of regular) {
   used.add(name);
 
   const srcTime = statSync(file).mtimeMs;
+  const video = isVideo(file);
+  const fresh = (p) => existsSync(p) && statSync(p).mtimeMs >= srcTime;
   const prev = manifest[name];
   const upToDate =
     !force &&
     prev &&
-    prev.widths.every((w) => prev.formats.every((f) => existsSync(join(OUT, `${name}-${w}.${f}`)) && statSync(join(OUT, `${name}-${w}.${f}`)).mtimeMs >= srcTime));
+    Boolean(prev.video) === video &&
+    (!video || fresh(join(VIDEO_OUT, prev.video))) &&
+    prev.widths.every((w) => prev.formats.every((f) => fresh(join(OUT, `${name}-${w}.${f}`))));
   if (upToDate) {
     nextManifest[name] = prev;
     skipped++;
@@ -96,28 +161,12 @@ for (const file of regular) {
   }
 
   try {
-    // rotate() applies EXIF orientation; sharp drops all metadata on output unless asked to keep it.
-    const { data, info } = await sharp(file, { failOn: 'none' }).rotate().toBuffer({ resolveWithObject: true });
-    const widths = WIDTHS.filter((w) => w < info.width);
-    if (widths.length < WIDTHS.length) widths.push(Math.min(info.width, WIDTHS[WIDTHS.length - 1]));
-    const uniqueWidths = [...new Set(widths)].sort((a, b) => a - b);
-
-    mkdirSync(OUT, { recursive: true });
-    for (const w of uniqueWidths) {
-      for (const [format, options] of Object.entries(FORMATS)) {
-        await sharp(data).resize({ width: w, withoutEnlargement: true }).toFormat(format, options).toFile(join(OUT, `${name}-${w}.${format}`));
-      }
-    }
-    const { dominant } = await sharp(data).resize(32).stats();
-    nextManifest[name] = {
-      w: info.width,
-      h: info.height,
-      widths: uniqueWidths,
-      formats: Object.keys(FORMATS),
-      color: `#${hex(dominant.r)}${hex(dominant.g)}${hex(dominant.b)}`,
-    };
+    const entry = video
+      ? { ...(await optimizeImage(await transcodeVideo(file, name), name)), video: `${name}.mp4` }
+      : await optimizeImage(file, name);
+    nextManifest[name] = entry;
     made++;
-    console.log(`  ✓ ${relative(root, file)}  →  "${name}"  (${info.width}×${info.height})`);
+    console.log(`  ✓ ${relative(root, file)}  →  "${name}"  (${entry.w}×${entry.h}${video ? ', video' : ''})`);
   } catch (err) {
     const heic = /\.hei[cf]$/i.test(file);
     problems.push(`${relative(root, file)}: ${heic ? 'HEIC not supported by this sharp build — export it as JPEG first.' : err.message}`);
@@ -143,6 +192,13 @@ if (args.has('--clean') && existsSync(OUT)) {
     if (/\.(avif|webp)$/.test(f) && !keep.has(f)) {
       rmSync(join(OUT, f));
       console.log(`  🗑  removed ${f}`);
+    }
+  }
+  const keepVideos = new Set(Object.values(nextManifest).map((e) => e.video).filter(Boolean));
+  for (const f of existsSync(VIDEO_OUT) ? readdirSync(VIDEO_OUT) : []) {
+    if (f.endsWith('.mp4') && !keepVideos.has(f)) {
+      rmSync(join(VIDEO_OUT, f));
+      console.log(`  🗑  removed videos/${f}`);
     }
   }
 }

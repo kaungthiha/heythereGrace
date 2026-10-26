@@ -8,6 +8,7 @@ export const STORAGE_KEYS = {
   guesses: 'graceTripGuesses',
   introOpened: 'graceIntroOpened',
   revealOpened: 'graceRevealOpened',
+  soundMuted: 'graceSoundMuted',
 } as const;
 
 export function readJSON<T>(key: string, fallback: T): T {

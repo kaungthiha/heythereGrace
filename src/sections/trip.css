@@ -360,6 +360,19 @@ html.js .ending__almost.rv {
   right: -18px;
   bottom: -38px;
 }
+/* Before her last guess: a sealed envelope where the countdown will be. */
+.countdown--locked {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+.countdown__envelope {
+  margin-top: 6px;
+}
+.countdown__locked {
+  font-size: var(--step-1);
+  color: var(--ink-soft);
+}
 
 /* ---- Guess card ---- */
 
@@ -429,6 +442,26 @@ html.js .ending__almost.rv {
   border-radius: 20px 20px 20px 4px;
   font-size: 1.5rem;
   animation: bubble-pop 0.45s 0.08s var(--ease-spring) both;
+}
+.guess__clue-note {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+.guess__left {
+  margin-top: 8px;
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+.guess__done {
+  margin-top: 10px;
+  font-size: var(--step-1);
+  color: var(--cocoa);
 }
 .guess__history {
   margin-top: 14px;

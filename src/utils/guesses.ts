@@ -28,6 +28,11 @@ export function addGuess(text: string, previous: Guess[], now = new Date()): Gue
   return next;
 }
 
+/** How many clues are readable after `guessCount` guesses: the first is free, each guess adds one. */
+export function cluesUnlocked(guessCount: number, totalClues: number): number {
+  return Math.min(totalClues, 1 + Math.max(0, guessCount));
+}
+
 /** Cycles through replies so two guesses in a row never get the same one. */
 export function replyFor(guessNumber: number, responses: string[]): string {
   if (responses.length === 0) return '';

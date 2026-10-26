@@ -73,13 +73,6 @@ export type StoryChapter = {
   mascot?: MascotPose;
 };
 
-export type LoveNote = {
-  id: string;
-  text: string;
-  icon?: string;
-  category?: string;
-};
-
 export type RelationshipStat = {
   id: string;
   value: string;
@@ -90,8 +83,6 @@ export type RelationshipStat = {
 export type TripClue = {
   id: string;
   text: string;
-  /** YYYY-MM-DD; unlocks at 00:00 in the trip's reveal time zone. Omit = visible immediately. */
-  unlockDate?: string;
   icon?: string;
 };
 
@@ -117,7 +108,14 @@ export type ItineraryDay = {
   items: ItineraryItem[];
 };
 
-export type RevealImage = { src: string; alt: string; width?: number; height?: number };
+export type RevealImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  /** Photographer / source, shown small under the photo. Required in spirit for any photo you didn't take. */
+  credit?: string;
+};
 
 export type TripRevealContent = {
   destination: {
@@ -127,6 +125,8 @@ export type TripRevealContent = {
     /** Import an image from ./assets/ (see docs/CONTENT_GUIDE.md). Omit to use an illustration. */
     image?: RevealImage;
   };
+  /** A handwritten note shown under the destination photo (e.g. who owes whom money). */
+  postscript?: string;
   /** Line shown after the reveal, before the itinerary. */
   planIntro?: string;
   days: ItineraryDay[];

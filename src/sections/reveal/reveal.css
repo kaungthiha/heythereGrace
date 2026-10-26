@@ -130,6 +130,19 @@
   gap: 6px;
 }
 
+.reveal__credit {
+  margin-top: 6px;
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+.reveal__postscript {
+  justify-self: center;
+  font-size: var(--step-2);
+  text-align: center;
+}
+
 .reveal__guesses {
   justify-self: center;
   max-width: 34rem;

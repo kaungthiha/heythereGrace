@@ -38,7 +38,7 @@ export function BirthdayLetter() {
           <p className="letter__signoff">
             <T>{letter.signoff}</T>
           </p>
-          <p className="letter__signature hand">
+          <p className="letter__signature hand" lang={siteConfig.author.nameLang}>
             <T>{siteConfig.author.name}</T>
           </p>
         </article>

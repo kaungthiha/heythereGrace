@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { tripTeaser } from '../content/tripTeaser';
-import { addGuess, isRepeat, loadGuesses, replyFor } from './guesses';
+import { addGuess, cluesUnlocked, isRepeat, loadGuesses, replyFor } from './guesses';
 
 describe('guesses', () => {
   beforeEach(() => localStorage.clear());
@@ -22,6 +22,14 @@ describe('guesses', () => {
   it('spots repeats regardless of case/spacing', () => {
     expect(isRepeat(' PARIS  ', [{ text: 'paris', at: '' }])).toBe(true);
     expect(isRepeat('Rome', [{ text: 'paris', at: '' }])).toBe(false);
+  });
+
+  it('unlocks one clue up front and one more per guess, up to the total', () => {
+    expect(cluesUnlocked(0, 5)).toBe(1);
+    expect(cluesUnlocked(1, 5)).toBe(2);
+    expect(cluesUnlocked(4, 5)).toBe(5);
+    expect(cluesUnlocked(9, 5)).toBe(5);
+    expect(cluesUnlocked(0, 0)).toBe(0);
   });
 
   it('replies never depend on the guess text (no answer checking)', () => {

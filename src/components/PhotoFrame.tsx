@@ -74,7 +74,23 @@ export function PhotoFrame({
             <Sticker key={pos} name={pick(photo.id, CORNERS)} width="clamp(30px, 7%, 52px)" rotate={i * 90} className={`photo__corner photo__corner--${pos}`} />
           ))}
         <div className="photo__media" style={mediaStyle}>
-          {showImage && resolved.kind === 'optimized' && (
+          {showImage && resolved.kind === 'optimized' && resolved.video && (
+            // Never autoplays; preload="none" means nothing downloads until she presses play.
+            <video
+              src={resolved.video}
+              poster={resolved.fallback}
+              width={resolved.width}
+              height={resolved.height}
+              controls
+              playsInline
+              preload="none"
+              aria-label={photo.alt}
+              style={imgStyle}
+              className="photo__img is-loaded"
+              onError={() => setStatus('failed')}
+            />
+          )}
+          {showImage && resolved.kind === 'optimized' && !resolved.video && (
             <picture>
               {resolved.sources.map((s) => (
                 <source key={s.type} type={s.type} srcSet={s.srcSet} sizes={sizes} />

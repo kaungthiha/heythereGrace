@@ -14,7 +14,9 @@ export const siteConfig = {
 
   author: {
     /** How you sign things. */
-    name: '[KT: your name, as you sign it]',
+    name: 'ကောင်း',
+    /** Language of `name` (BCP 47), so browsers pick a font that has the script. */
+    nameLang: 'my',
   },
 
   relationship: {
@@ -42,16 +44,10 @@ export const siteConfig = {
 
   hero: {
     title: 'Happy Birthday,',
-    subtitle: 'A small corner of the internet for my favorite person.',
+    subtitle: 'A small corner of the internet for you.',
     /** Photo id from photos.ts. */
     photo: 'hero',
-    note: '[KT: Add opening message]',
-  },
-
-  loveNotes: {
-    title: 'Things I love about you',
-    subtitle: '(an incomplete list)',
-    photo: 'love-portrait',
+    note: 'wow she oldddd',
   },
 
   stats: {
@@ -61,12 +57,17 @@ export const siteConfig = {
   closing: {
     photo: 'closing',
     line: 'Happy birthday, Grace.',
-    message: '[KT: Your closing message]',
-    signoff: '[KT: Closing line — e.g. “See you on the next page.”]',
+    signoff: 'wash up stinky',
   },
 
-  /** Optional soundtrack you own the rights to, placed in public/audio/. Never autoplays. null = no sound button. */
-  soundtrack: null as null | { src: string; label: string },
+  /**
+   * Site-wide soundtrack in public/audio/, looping. Starts on her first tap/keypress (browsers don't
+   * allow sound before that) unless she muted it before. null = no music and no sound button.
+   */
+  soundtrack: {
+    src: 'audio/soundtrack.mp3',
+    label: 'The Kiffness × NumNum Cat (Live Looping Balkan Remix)',
+  } as null | { src: string; label: string },
 };
 
 export type SiteConfig = typeof siteConfig;

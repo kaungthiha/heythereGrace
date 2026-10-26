@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { loveNotes } from './loveNotes';
 import { photos } from './photos';
 import tripNone from './reveal/none';
 import tripMock from './reveal/trip.mock';
 import { siteConfig } from './site';
 import stickers from './stickers.generated.json';
 import { story } from './story';
-import { tripClues } from './tripTeaser';
+import { tripClues, tripTeaser } from './tripTeaser';
 
 const photoIds = new Set(photos.map((p) => p.id));
 
@@ -15,18 +14,19 @@ describe('content integrity', () => {
     for (const ch of story) for (const id of ch.photos) expect(photoIds.has(id), `${ch.id} → ${id}`).toBe(true);
   });
   it('section photos exist', () => {
-    for (const id of [siteConfig.hero.photo, siteConfig.loveNotes.photo, siteConfig.closing.photo]) expect(photoIds.has(id)).toBe(true);
+    for (const id of [siteConfig.hero.photo, siteConfig.closing.photo]) expect(photoIds.has(id)).toBe(true);
   });
   it('ids are unique', () => {
     expect(new Set(photos.map((p) => p.id)).size).toBe(photos.length);
     expect(new Set(story.map((c) => c.id)).size).toBe(story.length);
-    expect(new Set(loveNotes.map((n) => n.id)).size).toBe(loveNotes.length);
   });
   it('every mascot pose has a sticker', () => {
     for (const ch of story) if (ch.mascot) expect(Object.keys(stickers)).toContain(`mascot/kt-${ch.mascot}`);
   });
-  it('clue unlock dates are valid ISO dates', () => {
-    for (const c of tripClues) if (c.unlockDate) expect(c.unlockDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  it('every guess gets its own reply and clues fit the guess budget', () => {
+    expect(tripTeaser.guess.responses.length).toBeGreaterThanOrEqual(tripTeaser.guess.maxGuesses);
+    expect(tripClues.length).toBeLessThanOrEqual(tripTeaser.guess.maxGuesses + 1);
+    expect(new Set(tripClues.map((c) => c.id)).size).toBe(tripClues.length);
   });
   it('never includes the birth year', () => {
     expect(JSON.stringify(siteConfig)).not.toMatch(/2001/);

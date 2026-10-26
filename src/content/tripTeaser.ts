@@ -26,34 +26,49 @@ export const tripTeaser = {
     prompt: 'Where do you think we’re going?',
     placeholder: 'Type a guess…',
     button: 'Guess',
-    /** Replies cycle in order. They never depend on what was guessed. */
+    /** She gets this many guesses. Each one unlocks the next clue; after the last, the countdown appears. */
+    maxGuesses: 5,
+    /** Reply to guess #1, #2, … in order. They never depend on what was guessed — right or wrong. */
     responses: [
-      'Interesting theory.',
-      'I’m saying absolutely nothing.',
-      'Recorded for posterity.',
-      'You seem very confident about that.',
+      'Are you sure?',
+      'Hmm… are you sure sure?',
+      'Bold. Are you sure about that?',
+      'Are you really, truly sure?',
+      'Are you sure? Too late, that was your last one.',
     ],
-    repeatResponse: 'You already guessed that one. Still saying nothing.',
+    repeatResponse: 'You already guessed that one. That one doesn’t count.',
+    /** Shown under a reply when that guess unlocked a clue. {n} = clue number. */
+    clueUnlocked: 'New clue unlocked: #{n} ↓',
+    /** {n} = guesses left, {max} = maxGuesses. */
+    left: '{n} of {max} guesses left',
+    outOfGuesses: 'That’s all five guesses. Locked in. The countdown is on.',
     historyTitle: 'Your guesses so far',
   },
 
   countdown: {
+    /** Shown instead of the countdown until she has used every guess. */
+    lockedLabel: 'Countdown locked',
+    locked: 'Use up all your guesses to unlock it.',
     label: 'Destination revealed in…',
     arrived: 'It’s time. The surprise is on its way — refresh in a little bit.',
   },
 
   clues: {
     title: 'Clues',
-    lockedLabel: 'unlocks',
+    /** Rendered as "unlocks after guess #2". */
+    lockedLabel: 'unlocks after guess',
   },
 };
 
 /**
- * Optional clues. Delete them all to hide the clue board. A clue with an `unlockDate` shows as a
- * sealed envelope until 00:00 on that date (in the trip's time zone).
+ * Clues, in unlock order. The first is visible from the start; each guess unlocks the next one.
+ * Delete them all to hide the clue board.
  * Clues are hints, not secrets: locked text is still in the page source for anyone who digs.
  */
 export const tripClues: TripClue[] = [
-  { id: 'clue-1', text: '[KT: Add trip clue #1]', icon: 'compass' },
-  { id: 'clue-2', text: '[KT: Add trip clue #2]', unlockDate: '2026-10-27', icon: 'suitcase' },
+  { id: 'clue-1', text: 'it’s in a nearby state.', icon: 'map' },
+  { id: 'clue-2', text: 'There’s going to be a….pile of stuff.', icon: 'backpack' },
+  { id: 'clue-3', text: 'Lebron.', icon: 'question' },
+  { id: 'clue-4', text: 'it’s to the northwest of Urba.', icon: 'compass' },
+  { id: 'clue-5', text: 'that’s enough clues lock in.', icon: 'luggage-tag' },
 ];
