@@ -122,6 +122,22 @@
   width: 100%;
   height: auto;
 }
+.reveal__photo--extra {
+  transform: rotate(var(--r, -1deg));
+}
+.reveal__photo--extra a {
+  display: block;
+}
+.reveal__extra-caption {
+  display: block;
+  margin: 0 0 8px;
+  font-size: var(--step-1);
+  color: var(--cocoa);
+  text-align: center;
+}
+.reveal__photo--extra .reveal__credit {
+  display: block;
+}
 
 .reveal__illustration {
   display: flex;

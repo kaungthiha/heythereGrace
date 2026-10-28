@@ -19,6 +19,10 @@ owners. Nothing here grants anyone else a license to reuse it.
 - The Ohiopyle waterfall photo shown in the reveal (`src/content/reveal/assets/destination.webp`) was
   found online; its source wasn't recorded. © its photographer, all rights reserved. If you know who
   took it, add `credit` to `destination.image` in `src/content/reveal/trip.ts` so it shows under the photo.
+- The cabin collage (`src/content/reveal/assets/cabin.webp`) is a screenshot of the rental listing's
+  photos. © the host / listing platform; credited under the photo.
+- The route map (`src/content/reveal/assets/route.webp`) is a Google Maps screenshot. Map data
+  © Google; credited under the map.
 
 ## Illustrations
 

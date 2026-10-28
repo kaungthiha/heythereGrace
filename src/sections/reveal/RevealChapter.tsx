@@ -5,6 +5,7 @@ import { Sticker } from '../../components/Sticker';
 import { T } from '../../components/Text';
 import { TornEdge } from '../../components/TornEdge';
 import { tripTeaser } from '../../content/tripTeaser';
+import type { RevealImage } from '../../content/types';
 import { useInView } from '../../hooks/useInView';
 import { confettiFrom } from '../../utils/confetti';
 import { loadGuesses } from '../../utils/guesses';
@@ -105,6 +106,24 @@ export default function RevealChapter() {
                 <T>{tripReveal.postscript}</T>
               </p>
             )}
+
+            {tripReveal.photos?.map((photo: RevealImage & { caption?: string }, i: number) => (
+              <figure key={photo.src} className="reveal__photo reveal__photo--extra rv rv--pop" style={{ '--r': `${i % 2 ? 1.2 : -1.4}deg` } as CSSProperties}>
+                {photo.caption && (
+                  <figcaption className="reveal__extra-caption hand">
+                    <T>{photo.caption}</T>
+                  </figcaption>
+                )}
+                <a href={photo.src} target="_blank" rel="noopener" aria-label={`${photo.alt} (opens full size)`}>
+                  <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+                </a>
+                {photo.credit && (
+                  <small className="reveal__credit">
+                    <T>{photo.credit}</T>
+                  </small>
+                )}
+              </figure>
+            ))}
 
             {guesses.length > 0 && (
               <div className="reveal__guesses rv">

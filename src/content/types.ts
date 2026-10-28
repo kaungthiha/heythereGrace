@@ -127,6 +127,8 @@ export type TripRevealContent = {
   };
   /** A handwritten note shown under the destination photo (e.g. who owes whom money). */
   postscript?: string;
+  /** More photos after the postscript (the cabin, a route map…). Each opens full size when tapped. */
+  photos?: (RevealImage & { caption?: string })[];
   /** Line shown after the reveal, before the itinerary. */
   planIntro?: string;
   days: ItineraryDay[];
