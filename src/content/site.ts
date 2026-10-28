@@ -33,7 +33,7 @@ export const siteConfig = {
      * "teaser"   → the build contains NO destination/itinerary (default; safe to deploy any time).
      * "revealed" → the build includes src/content/reveal/trip.ts. Only switch on reveal day.
      */
-    revealMode: 'teaser' as 'teaser' | 'revealed',
+    revealMode: 'revealed' as 'teaser' | 'revealed',
   },
 
   intro: {

@@ -16,8 +16,9 @@ owners. Nothing here grants anyone else a license to reuse it.
 
 - Everything in `public/images/` and `public/videos/` is © Kaung and Grace. These are personal photos
   and clips. All rights reserved; please don't reuse them.
-- The destination photo shown after the reveal is credited under the photo itself, in the revealed
-  build.
+- The Ohiopyle waterfall photo shown in the reveal (`src/content/reveal/assets/destination.webp`) was
+  found online; its source wasn't recorded. © its photographer, all rights reserved. If you know who
+  took it, add `credit` to `destination.image` in `src/content/reveal/trip.ts` so it shows under the photo.
 
 ## Illustrations
 

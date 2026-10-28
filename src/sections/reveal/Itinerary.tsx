@@ -48,11 +48,13 @@ export function Itinerary({ trip }: { trip: TripRevealContent }) {
         </div>
       )}
 
-      <ol className="plan__route" role="list">
-        {days.map((day, i) => (
-          <Day key={day.date + i} day={day} index={i} />
-        ))}
-      </ol>
+      {days.length > 0 && (
+        <ol className="plan__route" role="list">
+          {days.map((day, i) => (
+            <Day key={day.date + i} day={day} index={i} />
+          ))}
+        </ol>
+      )}
 
       <div className="plan__extras">
         {lodging && (
